@@ -1,0 +1,38 @@
+﻿@page
+@model Assignment1.Pages.LoginModel;
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="text-center mb-4">Login</h1>
+
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="LModel.EmailAddress">Email Address</label>
+                    <input class="form-control" asp-for="LModel.EmailAddress" type="Text" />
+                    <span class="text-danger" asp-validation-for="LModel.EmailAddress"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="LModel.Password">Password</label>
+                    <input class="form-control" asp-for="LModel.Password" type="Password" />
+                    <span class="text-danger" asp-validation-for="LModel.Password"></span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" asp-for="LModel.RememberMe" class="form-check-input"/>
+                    <label class="form-check-label" asp-for="LModel.RememberMe">Remember Me?</label>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

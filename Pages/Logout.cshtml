@@ -1,0 +1,20 @@
+﻿@page
+@model Assignment1.Pages.LogoutModel;
+@{
+    ViewData["Title"] = "Logout";
+}
+
+
+<form method="post">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-12 col-lg-4">
+                <p>Are you sure you want to log out?</p>
+                <p>
+                    <button class="btn btn-primary" asp-page-handler="Logout">Logout</button>
+                    <button class="btn btn-light m-lg-5 border-dark" asp-page-handler="Cancel">Cancel</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</form>
