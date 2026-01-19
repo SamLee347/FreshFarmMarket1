@@ -26,8 +26,15 @@ namespace Assignment1.Pages
             {
                 var user = new ApplicationUser()
                 {
+                    FullName = RModel.FullName,
                     UserName = RModel.EmailAddress,
-                    Email = RModel.EmailAddress
+                    Email = RModel.EmailAddress,
+                    CreditCardNumber = RModel.CreditCardNumber,
+                    Gender = RModel.Gender,
+                    MobileNo = RModel.MobileNo,
+                    DeliveryAddress = RModel.DeliveryAddress,
+                    Photo = RModel.Photo.ToString(),
+                    Description = RModel.Description
                 };
                 var result = await _userManager.CreateAsync(user, RModel.Password);
                 if (result.Succeeded)

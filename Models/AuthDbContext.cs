@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Assignment1.Models
 {
-    public class AuthDbContext : IdentityDbContext
+    public class AuthDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly IConfiguration _configuration;
 
