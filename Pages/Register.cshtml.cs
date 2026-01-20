@@ -1,8 +1,8 @@
 using Assignment1.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Assignment1.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment1.Pages
 {

@@ -10,10 +10,8 @@
             <h1 class="text-center mb-4">Register</h1>
 
             <form method="post">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col">
-                        <div asp-validation-summary="All" class="text-danger"></div>
-
+                <div class="row justify-content-center align-items-start">
+                    <div class="col mt-3">
                         <div class="mb-3">
                             <label class="form-label" asp-for="RModel.EmailAddress">Email Address</label>
                             <input class="form-control" asp-for="RModel.EmailAddress" type="Text"/>
@@ -62,7 +60,7 @@
                             <span class="text-danger" asp-validation-for="RModel.CreditCardNumber"></span>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col mt-3">
                         <div class="mb-3">
                             <label class="form-label" asp-for="RModel.Photo">Photo</label>
                             <input class="form-control" asp-for="RModel.Photo" type="file"/>
@@ -73,9 +71,10 @@
                             <input class="form-control" asp-for="RModel.Description" type="Text" />
                             <span class="text-danger" asp-validation-for="RModel.Description"></span>
                         </div>
+                        <div asp-validation-summary="All" class="text-danger"></div>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mt-3">
                     <button type="submit" class="btn btn-primary w-100">Register</button>
                 </div>
             </form>
