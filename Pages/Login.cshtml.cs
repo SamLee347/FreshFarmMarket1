@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Assignment1.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Assignment1.Pages
 {
@@ -22,6 +24,18 @@ namespace Assignment1.Pages
                 var result = await signInManager.PasswordSignInAsync(LModel.EmailAddress, LModel.Password, LModel.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    //Create the security context
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, LModel.EmailAddress),
+                        new Claim("UserType","Default")
+
+                    };
+
+                    var i = new ClaimsIdentity(claims, "MyCookieAuth");
+                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(i);
+                    await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
+
                     return RedirectToPage("/Index");
                 }
                 ModelState.AddModelError(string.Empty, "Username or password is incorrect");
