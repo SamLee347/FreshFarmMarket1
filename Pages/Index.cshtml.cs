@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Assignment1.Pages
 {
-    [Authorize(Policy = "LoggedIn", AuthenticationSchemes = "MyCookieAuth")]
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;

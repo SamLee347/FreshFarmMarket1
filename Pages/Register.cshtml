@@ -1,15 +1,24 @@
 ﻿@page
 @model Assignment1.Pages.RegisterModel;
+@inject IConfiguration configuration;
 @{
     ViewData["Title"] = "Register";
+    var recaptchaSiteKey = configuration["ReCAPTCHA:SiteKey"];
 }
+@* Add recaptcha *@
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script>
+    function onSubmit(token) {
+      document.getElementById("register-form").submit();
+    }
+</script>
 
 <div class="container mt-5">
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-12 col-lg-8">
             <h1 class="text-center mb-4">Register</h1>
 
-            <form method="post">
+            <form method="post" id="register-form">
                 <div class="row justify-content-center align-items-start">
                     <div class="col mt-3">
                         <div class="mb-3">
@@ -75,7 +84,12 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                    <button class="g-recaptcha btn btn-primary w-100"
+                            data-sitekey="@recaptchaSiteKey"
+                            data-callback='onSubmit'
+                            data-action='submit'>
+                        Register
+                    </button>
                 </div>
             </form>
         </div>

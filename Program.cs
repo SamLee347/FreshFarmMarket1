@@ -15,24 +15,21 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/login";
 });
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-})
-.AddCookie("MyCookieAuth", options =>
-{
-    options.Cookie.Name = "MyCookieAuth";
-    options.AccessDeniedPath = "/AccessDenied";
-    options.LoginPath = "/login";
-});
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+//    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+//})
+//.AddCookie("MyCookieAuth", options =>
+//{
+//    options.Cookie.Name = "MyCookieAuth";
+//    options.AccessDeniedPath = "/AccessDenied";
+//    options.LoginPath = "/login";
+//});
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("UserType", "Admin"));
-
-    //for any logged in user
-    options.AddPolicy("LoggedIn", policy => policy.RequireClaim("UserType", "Default", "Admin"));
 });
 
 var app = builder.Build();

@@ -1,15 +1,26 @@
 ﻿@page
 @model Assignment1.Pages.LoginModel;
+@inject IConfiguration configuration;
 @{
     ViewData["Title"] = "Login";
+    var recaptchaSiteKey = configuration["ReCAPTCHA:SiteKey"];
+
 }
+@* Add recaptcha *@
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script>
+    function onSubmit(token) {
+      document.getElementById("login-form").submit();
+    }
+</script>
+
 
 <div class="container mt-5">
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-12 col-lg-4">
             <h1 class="text-center mb-4">Login</h1>
 
-            <form method="post">
+            <form method="post" id="login-form">
                 <div asp-validation-summary="All" class="text-danger"></div>
 
                 <div class="mb-3">
@@ -30,7 +41,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button class="g-recaptcha btn btn-primary w-100"
+                            data-sitekey="@recaptchaSiteKey"
+                            data-callback='onSubmit'
+                            data-action='submit'>
+                        Login
+                    </button>
                 </div>
             </form>
         </div>

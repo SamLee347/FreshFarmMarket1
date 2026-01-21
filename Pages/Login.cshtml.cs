@@ -25,16 +25,16 @@ namespace Assignment1.Pages
                 if (result.Succeeded)
                 {
                     //Create the security context
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, LModel.EmailAddress),
-                        new Claim("UserType","Default")
+                    //var claims = new List<Claim>
+                    //{
+                    //    new Claim(ClaimTypes.Name, LModel.EmailAddress),
+                    //    new Claim("UserType","Default")
 
-                    };
+                    //};
 
-                    var i = new ClaimsIdentity(claims, "MyCookieAuth");
-                    ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(i);
-                    await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
+                    //var i = new ClaimsIdentity(claims, "MyCookieAuth");
+                    //ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(i);
+                    //await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
 
                     return RedirectToPage("/Index");
                 }

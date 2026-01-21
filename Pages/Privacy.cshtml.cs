@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Assignment1.Pages
 {
-    [Authorize(Policy = "LoggedIn", AuthenticationSchemes = "MyCookieAuth")]
+    [Authorize]
     public class PrivacyModel : PageModel
     {
         private readonly ILogger<PrivacyModel> _logger;
