@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Assignment1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Assignment1.Pages
 {
@@ -22,6 +23,9 @@ namespace Assignment1.Pages
         public void OnGet() { }
         public async Task<IActionResult> OnPostAsync()
         {
+            var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+            var protector = dataProtectionProvider.CreateProtector("MySecretKey");
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser()
@@ -29,7 +33,7 @@ namespace Assignment1.Pages
                     FullName = RModel.FullName,
                     UserName = RModel.EmailAddress,
                     Email = RModel.EmailAddress,
-                    CreditCardNumber = RModel.CreditCardNumber,
+                    CreditCardNumber = protector.Protect(RModel.CreditCardNumber),
                     Gender = RModel.Gender,
                     MobileNo = RModel.MobileNo,
                     DeliveryAddress = RModel.DeliveryAddress,

@@ -6,7 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AuthDbContext>();
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+    // Email must be unique
+    options.User.RequireUniqueEmail = true;
+
+    // Password settings
+    options.Password.RequiredLength = 12;
+})
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
