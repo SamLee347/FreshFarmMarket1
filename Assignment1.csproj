@@ -18,6 +18,11 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\Uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Uploads\2kki_moon.jpg" />
   </ItemGroup>
 
 </Project>

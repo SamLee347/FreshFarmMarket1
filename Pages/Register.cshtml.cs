@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Assignment1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.DataProtection;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Assignment1.Pages
 {
@@ -11,14 +13,16 @@ namespace Assignment1.Pages
     {
         private UserManager<ApplicationUser> _userManager { get; }
         private SignInManager<ApplicationUser> _signInManager { get; }
+        private IWebHostEnvironment _environment;
 
         [BindProperty]
         public Register RModel { get; set; }
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _environment = environment;
         }
         public void OnGet() { }
         public async Task<IActionResult> OnPostAsync()
@@ -28,6 +32,16 @@ namespace Assignment1.Pages
 
             if (ModelState.IsValid)
             {
+                var file = string.Empty;
+                if (RModel.Photo != null)
+                {
+                    file = Path.Combine(_environment.WebRootPath, "Uploads", RModel.Photo.FileName);
+                    using (var fileStream = new FileStream(file, FileMode.Create))
+                    {
+                        await RModel.Photo.CopyToAsync(fileStream);
+                    }
+                    Console.Write(file);
+                }
                 var user = new ApplicationUser()
                 {
                     FullName = RModel.FullName,
@@ -37,7 +51,7 @@ namespace Assignment1.Pages
                     Gender = RModel.Gender,
                     MobileNo = RModel.MobileNo,
                     DeliveryAddress = RModel.DeliveryAddress,
-                    Photo = RModel.Photo.ToString(),
+                    Photo = RModel.Photo.FileName,
                     Description = RModel.Description
                 };
                 var result = await _userManager.CreateAsync(user, RModel.Password);

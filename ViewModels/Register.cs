@@ -3,47 +3,60 @@
 
 namespace Assignment1.ViewModels
 {
-    public class Register
+    public class Register : IValidatableObject
     {
         // Properties
-        // FullName
         [Required]
         [DataType(DataType.Text)]
         public string FullName { get; set; }
-        // CreditCardNumber
+
         [Required]
         [DataType(DataType.CreditCard)]
         public string CreditCardNumber { get; set; }
-        // Gender
+
         [Required]
         [DataType(DataType.Text)]
         public string Gender { get; set; }
-        // MobileNo
+
         [Required]
         [DataType(DataType.PhoneNumber)]
         public string MobileNo { get; set; }
-        // DeliveryAddress
+
         [Required]
         [DataType(DataType.Text)]
         public string DeliveryAddress { get; set; }
-        // EmailAddress
+
         [Required]
         [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
-        // Password
+
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        // ConfirmPassword
+
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        // Photo
+
         [DataType(DataType.Upload)]
-        public string Photo { get; set; }
-        // Description
+        public IFormFile? Photo { get; set; }
+
         [DataType(DataType.MultilineText)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Photo != null)
+            {
+                var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp" };
+                if (!allowedTypes.Contains(Photo.ContentType))
+                {
+                    yield return new ValidationResult(
+                        "Only image files (jpg, png, gif, bmp, webp) are allowed.",
+                        new[] { nameof(Photo) });
+                }
+            }
+        }
     }
 }
