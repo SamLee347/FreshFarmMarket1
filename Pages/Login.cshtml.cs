@@ -21,7 +21,7 @@ namespace Assignment1.Pages
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(LModel.EmailAddress, LModel.Password, LModel.RememberMe, lockoutOnFailure: false);
+                var result = await signInManager.PasswordSignInAsync(LModel.EmailAddress, LModel.Password, LModel.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     //Create the security context
@@ -38,7 +38,14 @@ namespace Assignment1.Pages
 
                     return RedirectToPage("/Index");
                 }
-                ModelState.AddModelError(string.Empty, "Username or password is incorrect");
+                else if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "Too many failed attempts. Please try again later.");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Username or password is incorrect");
+                }
             }
             return Page();
         }

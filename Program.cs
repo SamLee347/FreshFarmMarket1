@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Assignment1.Models;
+using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     WebRootPath = "wwwroot"
@@ -15,12 +16,21 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 
     // Password settings
     options.Password.RequiredLength = 12;
+
+    // Account lockout
+    options.Lockout.MaxFailedAccessAttempts = 3;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+    options.Lockout.AllowedForNewUsers = true;
 })
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(config =>
 {
+    config.Cookie.HttpOnly = true;
+    config.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    config.AccessDeniedPath = "/AccessDenied";
+    config.SlidingExpiration = true;
     config.LoginPath = "/login";
 });
 

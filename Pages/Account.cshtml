@@ -1,5 +1,6 @@
 ﻿@page
 @model Assignment1.Pages.AccountModel
+@using Microsoft.AspNetCore.DataProtection
 @using Microsoft.AspNetCore.Identity
 @using Assignment1.Models
 @using System.IO
@@ -8,6 +9,8 @@
 @{
     ViewData["Title"] = "Account";
     var user = await UserManager.GetUserAsync(User);
+    var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+    var protector = dataProtectionProvider.CreateProtector("MySecretKey");
 }
 
 @if (user == null)
@@ -98,10 +101,10 @@ else {
                     <span class="label">Mobile Number:</span> @user.MobileNo
                 </div>
                 <div class="info-item">
-                    <span class="label">Delivery Address:</span> @user.DeliveryAddress
+                    <span class="label">Delivery Address:</span> @protector.Unprotect(user.DeliveryAddress)
                 </div>
                 <div class="info-item">
-                    <span class="label">Credit Card Number:</span> @user.CreditCardNumber
+                    <span class="label">Credit Card Number:</span> @protector.Unprotect(user.CreditCardNumber)
                 </div>
 
                 <div class="description">

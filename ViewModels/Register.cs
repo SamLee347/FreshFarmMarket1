@@ -8,14 +8,17 @@ namespace Assignment1.ViewModels
         // Properties
         [Required]
         [DataType(DataType.Text)]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Full Name can only contain letters and spaces.")]
         public string FullName { get; set; }
 
         [Required]
         [DataType(DataType.CreditCard)]
+        [RegularExpression(@"^\d{13,19}$", ErrorMessage = "Credit Card Number must be between 13 and 19 digits.")]
         public string CreditCardNumber { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Gender can only contain letters and spaces.")]
         public string Gender { get; set; }
 
         [Required]
@@ -24,6 +27,7 @@ namespace Assignment1.ViewModels
 
         [Required]
         [DataType(DataType.Text)]
+        [RegularExpression(@"^[a-zA-Z0-9\s#,.-]+$", ErrorMessage = "Delivery Address contains invalid characters.")]
         public string DeliveryAddress { get; set; }
 
         [Required]

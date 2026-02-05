@@ -9,7 +9,7 @@ namespace Assignment1.Models
         public string Gender { get; set; }
         public string MobileNo { get; set; }
         public string DeliveryAddress { get; set; }
-        public string? Photo { get; set; }
+        public string? Photo { get; set; } = "DefaultIcon.png";
         public string? Description { get; set; }
     }
 }

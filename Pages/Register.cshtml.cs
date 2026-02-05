@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.DataProtection;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.Encodings.Web;
+using System.Web;
 
 namespace Assignment1.Pages
 {
@@ -40,7 +42,6 @@ namespace Assignment1.Pages
                     {
                         await RModel.Photo.CopyToAsync(fileStream);
                     }
-                    Console.Write(file);
                 }
                 var user = new ApplicationUser()
                 {
@@ -50,9 +51,9 @@ namespace Assignment1.Pages
                     CreditCardNumber = protector.Protect(RModel.CreditCardNumber),
                     Gender = RModel.Gender,
                     MobileNo = RModel.MobileNo,
-                    DeliveryAddress = RModel.DeliveryAddress,
+                    DeliveryAddress = protector.Protect(RModel.DeliveryAddress),
                     Photo = RModel.Photo.FileName,
-                    Description = RModel.Description
+                    Description = HttpUtility.HtmlEncode(RModel.Description)
                 };
                 var result = await _userManager.CreateAsync(user, RModel.Password);
                 if (result.Succeeded)
