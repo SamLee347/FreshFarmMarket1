@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Assignment1.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Assignment1.ViewModels;
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     WebRootPath = "wwwroot"
@@ -22,6 +24,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
     options.Lockout.AllowedForNewUsers = true;
+
+    // Email Verification
+    options.SignIn.RequireConfirmedEmail = true;
 })
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
@@ -40,6 +45,10 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("UserType", "Admin"));
 });
+
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 

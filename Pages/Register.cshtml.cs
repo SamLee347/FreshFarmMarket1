@@ -8,23 +8,24 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text.Encodings.Web;
 using System.Web;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Assignment1.Pages
 {
     public class RegisterModel : PageModel
     {
         private UserManager<ApplicationUser> _userManager { get; }
-        private SignInManager<ApplicationUser> _signInManager { get; }
         private IWebHostEnvironment _environment;
+        private readonly IEmailSender _emailSender;
 
         [BindProperty]
         public Register RModel { get; set; }
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment)
+        public RegisterModel(UserManager<ApplicationUser> userManager, IWebHostEnvironment environment, IEmailSender emailSender)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _environment = environment;
+            _emailSender = emailSender;
         }
         public void OnGet() { }
         public async Task<IActionResult> OnPostAsync()
@@ -59,9 +60,21 @@ namespace Assignment1.Pages
                 var result = await _userManager.CreateAsync(user, RModel.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    return RedirectToPage("/Index");
+                    var confirmationLink = Url.Page(
+                        "/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { userId, token },
+                    protocol: Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(
+                        RModel.EmailAddress,
+                        "Confirm your email",
+                        $"Please confirm your account by <a href='{confirmationLink}'>clicking here</a>.");
+
+                    return RedirectToPage("RegisterConfirmation");
                 }
                 foreach (var error in result.Errors)
                 {
