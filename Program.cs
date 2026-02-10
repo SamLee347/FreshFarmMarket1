@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Assignment1.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.DataProtection;
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     WebRootPath = "wwwroot"
@@ -17,7 +18,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
     // Password settings
     options.Password.RequiredLength = 12;
 
-    // Account lockout
+    // Account lockout 
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
     options.Lockout.AllowedForNewUsers = true;
@@ -29,22 +30,11 @@ builder.Services.ConfigureApplicationCookie(config =>
 {
     config.Cookie.HttpOnly = true;
     config.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    config.LogoutPath = "/logout";
     config.AccessDeniedPath = "/AccessDenied";
     config.SlidingExpiration = true;
     config.LoginPath = "/login";
 });
-
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-//    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-//})
-//.AddCookie("MyCookieAuth", options =>
-//{
-//    options.Cookie.Name = "MyCookieAuth";
-//    options.AccessDeniedPath = "/AccessDenied";
-//    options.LoginPath = "/login";
-//});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -60,8 +50,15 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

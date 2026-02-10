@@ -34,15 +34,6 @@ namespace Assignment1.Pages
 
             if (ModelState.IsValid)
             {
-                var file = string.Empty;
-                if (RModel.Photo != null)
-                {
-                    file = Path.Combine(_environment.WebRootPath, "Uploads", RModel.Photo.FileName);
-                    using (var fileStream = new FileStream(file, FileMode.Create))
-                    {
-                        await RModel.Photo.CopyToAsync(fileStream);
-                    }
-                }
                 var user = new ApplicationUser()
                 {
                     FullName = RModel.FullName,
@@ -52,13 +43,24 @@ namespace Assignment1.Pages
                     Gender = RModel.Gender,
                     MobileNo = RModel.MobileNo,
                     DeliveryAddress = protector.Protect(RModel.DeliveryAddress),
-                    Photo = RModel.Photo.FileName,
-                    Description = HttpUtility.HtmlEncode(RModel.Description)
+                    Description = RModel.Description,
                 };
+
+                if (RModel.Photo != null)
+                {
+                    user.Photo = RModel.Photo.FileName;
+                    var file = Path.Combine(_environment.WebRootPath, "Uploads", RModel.Photo.FileName);
+                    using (var fileStream = new FileStream(file, FileMode.Create))
+                    {
+                        await RModel.Photo.CopyToAsync(fileStream);
+                    }
+                }
+
                 var result = await _userManager.CreateAsync(user, RModel.Password);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
                     return RedirectToPage("/Index");
                 }
                 foreach (var error in result.Errors)
