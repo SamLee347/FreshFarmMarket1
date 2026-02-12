@@ -18,5 +18,8 @@ namespace Assignment1.Models
             string connectionString = _configuration.GetConnectionString("AuthConnectionString");
             optionsBuilder.UseSqlServer(connectionString);
         }
+
+        public DbSet<UserPasswordHistory> PasswordHistory { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
     }
 }

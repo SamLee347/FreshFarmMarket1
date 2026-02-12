@@ -44,7 +44,7 @@ namespace Assignment1.Pages
                     Gender = RModel.Gender,
                     MobileNo = RModel.MobileNo,
                     DeliveryAddress = protector.Protect(RModel.DeliveryAddress),
-                    Description = RModel.Description,
+                    Description = HttpUtility.HtmlEncode(RModel.Description),
                 };
 
                 if (RModel.Photo != null)

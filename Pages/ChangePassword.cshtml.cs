@@ -11,13 +11,15 @@ namespace Assignment1.Pages
     public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuditService _audit;
 
         [BindProperty]
         public ChangePassword CPModel { get; set; }
 
-        public ChangePasswordModel(UserManager<ApplicationUser> userManager)
+        public ChangePasswordModel(UserManager<ApplicationUser> userManager, IAuditService audit)
         {
             _userManager = userManager;
+            _audit = audit;
         }
         public void OnGet()
         {
@@ -30,9 +32,11 @@ namespace Assignment1.Pages
                 var user = await _userManager.GetUserAsync(User);
                 if (user != null)
                 {
+                    var oldValues = user;
                     var changePasswordResult = await _userManager.ChangePasswordAsync(user, CPModel.Password, CPModel.NewPassword);
                     if (changePasswordResult.Succeeded)
                     {
+                        await _audit.LogAsync(action: "PasswordChanged", "AspNetUsers", user.Id, oldValues, user);
                         return RedirectToPage("/Index");
                     }
                     else

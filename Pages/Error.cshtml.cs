@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
+using System.Net;
 
 namespace Assignment1.Pages
 {
@@ -9,6 +10,7 @@ namespace Assignment1.Pages
     public class ErrorModel : PageModel
     {
         public string? RequestId { get; set; }
+        public int StatusCode { get; private set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
@@ -19,9 +21,14 @@ namespace Assignment1.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public void OnGet(int statusCode)
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            StatusCode = statusCode;
+            if (Response.StatusCode == (int)HttpStatusCode.OK)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+            }
         }
     }
 }

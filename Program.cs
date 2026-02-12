@@ -34,7 +34,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 builder.Services.ConfigureApplicationCookie(config =>
 {
     config.Cookie.HttpOnly = true;
-    config.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    config.ExpireTimeSpan = TimeSpan.FromMinutes(2);
     config.LogoutPath = "/logout";
     config.AccessDeniedPath = "/AccessDenied";
     config.SlidingExpiration = true;
@@ -50,18 +50,20 @@ builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IAuditService, AuditService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
     app.UseHsts();
 }
 else
 {
-    app.UseExceptionHandler("/Error");
     app.UseStatusCodePagesWithReExecute("/Error/{0}");
     app.UseHsts();
 }

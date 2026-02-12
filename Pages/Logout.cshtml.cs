@@ -8,9 +8,11 @@ namespace Assignment1.Pages
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> signInManager;
-        public LogoutModel(SignInManager<ApplicationUser> signInManager)
+        private readonly IAuditService _audit;
+        public LogoutModel(SignInManager<ApplicationUser> signInManager, IAuditService audit)
         {
             this.signInManager = signInManager;
+            _audit = audit;
         }
 
         public void OnGet()
@@ -20,6 +22,7 @@ namespace Assignment1.Pages
         public async Task<IActionResult> OnPostLogoutAsync()
         {
             await signInManager.SignOutAsync();
+            await _audit.LogAsync("Logout");
             return RedirectToPage("/Index");
         }
 
