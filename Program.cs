@@ -54,6 +54,8 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IAuditService, AuditService>();
 
+builder.Services.AddScoped<IPasswordHistoryService, PasswordHistoryService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

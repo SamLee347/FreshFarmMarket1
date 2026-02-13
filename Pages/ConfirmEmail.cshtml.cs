@@ -8,12 +8,18 @@ public class ConfirmEmailModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
     private SignInManager<ApplicationUser> _signInManager { get; }
     private readonly IAuditService _audit;
+    private readonly IPasswordHistoryService _passwordHistory;
 
-    public ConfirmEmailModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAuditService audit)
+    public ConfirmEmailModel(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IAuditService audit,
+        IPasswordHistoryService passwordHistory)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _audit = audit;
+        _passwordHistory = passwordHistory;
     }
 
     public string StatusMessage { get; set; }
@@ -38,9 +44,8 @@ public class ConfirmEmailModel : PageModel
             : "Error confirming your email.";
 
         await _signInManager.SignInAsync(user, isPersistent: false);
-        await _audit.LogAsync("Register", "AspNetUsers", user.Id, null, user);
-
-
+        await _audit.LogAsync("Register", "Users", user.Id, null, user);
+        await _passwordHistory.LogAsync();
 
         return RedirectToPage("/Index");
     }

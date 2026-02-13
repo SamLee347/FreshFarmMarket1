@@ -28,18 +28,18 @@ namespace Assignment1.Models
             _userManager = userManager;
         }
 
-            public AuthDbContext Db => _db;
+        public AuthDbContext Db => _db;
 
-            public IHttpContextAccessor Http => _http;
+        public IHttpContextAccessor Http => _http;
 
-            public UserManager<ApplicationUser> UserManager => _userManager;
+        public UserManager<ApplicationUser> UserManager => _userManager;
 
-            public async Task LogAsync(
-            string action,
-            string entity = null,
-            string entityId = null,
-            object oldValues = null,
-            object newValues = null)
+        public async Task LogAsync(
+        string action,
+        string entity = null,
+        string entityId = null,
+        object oldValues = null,
+        object newValues = null)
         {
             var user = Http.HttpContext?.User;
             var userId = UserManager.GetUserId(user);
