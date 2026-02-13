@@ -686,7 +686,13 @@ $.extend( $.validator, {
 		},
 
 		clean: function( selector ) {
-			return $( selector )[ 0 ];
+			if ( selector && selector.jquery ) {
+				return selector[ 0 ];
+			}
+			if ( selector && selector.nodeType === 1 ) {
+				return selector;
+			}
+			return undefined;
 		},
 
 		errors: function() {
@@ -1077,12 +1083,20 @@ $.extend( $.validator, {
 
 		validationTargetFor: function( element ) {
 
+			// Support jQuery-wrapped elements
+			if ( element && element.jquery ) {
+				element = element[ 0 ];
+			}
+
 			// If radio/checkbox, validate first element in group instead
 			if ( this.checkable( element ) ) {
 				element = this.findByName( element.name );
 			}
 
-			// Always apply ignore filter
+			// Always apply ignore filter; ensure we only wrap real elements
+			if ( !element ) {
+				return undefined;
+			}
 			return $( element ).not( this.settings.ignore )[ 0 ];
 		},
 
