@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment1.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20260212071513_DbUpdate9")]
-    partial class DbUpdate9
+    [Migration("20260213044902_Update1")]
+    partial class Update1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
